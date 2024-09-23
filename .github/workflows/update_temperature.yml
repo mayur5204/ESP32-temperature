@@ -1,0 +1,23 @@
+name: Update Temperature Reading
+
+on:
+  repository_dispatch:
+    types: [update-temperature]  # Trigger this action using the webhook event
+
+jobs:
+  update-temperature-file:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository content
+        uses: actions/checkout@v2
+
+      - name: Set temperature value from webhook payload
+        run: echo "${{ github.event.client_payload.temperature }}" > temperature.txt
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git add temperature.txt
+          git commit -m "Updated temperature reading"
+          git push
