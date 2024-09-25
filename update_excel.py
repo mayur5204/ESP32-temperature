@@ -1,6 +1,5 @@
 import json
 from openpyxl import load_workbook
-from openpyxl.utils import get_column_letter
 from datetime import datetime
 
 # Load data from the JSON file fetched from Adafruit IO
@@ -24,9 +23,9 @@ except FileNotFoundError:
 timestamp = data['created_at']
 feed_key = data['feed_key']
 value = data['value']
-lat = data['lat']
-lon = data['lon']
-ele = data['ele']
+lat = data.get('lat', 'N/A')  # Default to 'N/A' if lat is missing
+lon = data.get('lon', 'N/A')  # Default to 'N/A' if lon is missing
+ele = data.get('ele', 'N/A')  # Default to 'N/A' if ele is missing
 
 # Append the new row
 sheet.append([timestamp, feed_key, value, lat, lon, ele])
