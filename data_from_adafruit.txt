@@ -1,2 +1,27 @@
 Latest data fetched from Adafruit IO:
-[{"id":"0FPMQDB1DE29PMCY6XZTCB4QV3","value":"29","feed_id":2891208,"feed_key":"temperature","created_at":"2024-09-23T09:48:44Z","location":{"type":"Feature","geometry":{"type":"Point","coordinates":["0.0","0.0","0.0"]}},"lat":"0.0","lon":"0.0","ele":"0.0","created_epoch":1727084924,"expiration":"2024-10-23T09:48:44Z"}]
+[{"id":"0FPMQDB1DE29PMCY6XZTCB4QV3","value":"29","feed_id":2891208,"feed_key":"temperature","created_at":"2024-09-23T09:48:44Z","location":{"type":"Feature","geometry":{"type":"Point","coordinates":["0.0","0.0","0.0"]}},"lat":"0.0","lon":"0.0","ele":"0.0","created_epoch":1727084924,"expiration":"2024-10-23T09:48:44Z"}]Latest data fetched from Adafruit IO:
+[
+  {
+    "id": "0FPMQDB1DE29PMCY6XZTCB4QV3",
+    "value": "29",
+    "feed_id": 2891208,
+    "feed_key": "temperature",
+    "created_at": "2024-09-23T09:48:44Z",
+    "location": {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          "0.0",
+          "0.0",
+          "0.0"
+        ]
+      }
+    },
+    "lat": "0.0",
+    "lon": "0.0",
+    "ele": "0.0",
+    "created_epoch": 1727084924,
+    "expiration": "2024-10-23T09:48:44Z"
+  }
+]
