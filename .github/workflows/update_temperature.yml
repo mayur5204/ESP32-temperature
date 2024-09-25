@@ -1,23 +1,32 @@
-name: Update Temperature Reading
+name: Fetch Adafruit IO Data
 
 on:
-  repository_dispatch:
-    types: [update-temperature]  # Trigger this action using the webhook event
+  schedule:
+    - cron: '0 * * * *'  # Runs every hour (you can modify the cron expression)
+  workflow_dispatch: # Allows manual run of the workflow from GitHub Actions
 
 jobs:
-  update-temperature-file:
+  fetch_data:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository content
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
 
-      - name: Set temperature value from webhook payload
-        run: echo "${{ github.event.client_payload.temperature }}" > temperature.txt
+    - name: Fetch data from Adafruit IO feed
+      run: |
+        curl -X GET "https://io.adafruit.com/api/v2/${{ secrets.ADAFRUIT_USERNAME }}/feeds/${{ secrets.FEED_KEY }}/data?limit=1" \
+        -H "X-AIO-Key: ${{ secrets.ADAFRUIT_IO_KEY }}" \
+        -o adafruit_data.txt
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-          git add temperature.txt
-          git commit -m "Updated temperature reading"
-          git push
+    - name: Append data to repository's .txt file
+      run: |
+        echo "Latest data fetched from Adafruit IO:" >> data_from_adafruit.txt
+        cat adafruit_data.txt >> data_from_adafruit.txt
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add data_from_adafruit.txt
+        git commit -m "Update with latest data from Adafruit IO"
+        git push
