@@ -2,8 +2,8 @@ name: Fetch Adafruit IO Data
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Runs every hour (you can modify the cron expression)
-  workflow_dispatch: # Allows manual run of the workflow from GitHub Actions
+    - cron: '0 * * * *'  # Runs every hour (modify as needed)
+  workflow_dispatch:
 
 jobs:
   fetch_data:
@@ -12,21 +12,25 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Install jq (for formatting JSON)
+      run: |
+        sudo apt-get install jq
+
     - name: Fetch data from Adafruit IO feed
       run: |
         curl -X GET "https://io.adafruit.com/api/v2/${{ secrets.ADAFRUIT_USERNAME }}/feeds/${{ secrets.FEED_KEY }}/data?limit=1" \
         -H "X-AIO-Key: ${{ secrets.ADAFRUIT_IO_KEY }}" \
-        -o adafruit_data.txt
+        -o adafruit_data.json
 
-    - name: Append data to repository's .txt file
+    - name: Format and append data to repository's .txt file
       run: |
         echo "Latest data fetched from Adafruit IO:" >> data_from_adafruit.txt
-        cat adafruit_data.txt >> data_from_adafruit.txt
+        cat adafruit_data.json | jq '.' >> data_from_adafruit.txt
 
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add data_from_adafruit.txt
-        git commit -m "Update with latest data from Adafruit IO"
-        git push
+        git commit -m "Update with formatted data from Adafruit IO"
+        git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
